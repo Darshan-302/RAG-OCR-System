@@ -1,0 +1,60 @@
+# RAG OCR System Configuration
+
+# OCR Configuration
+ocr:
+  type: "unlimited_ocr"  # Options: unlimited_ocr, tesseract, easyocr, paddleocr
+  unlimited_ocr:
+    model_dir: "baidu/Unlimited-OCR"
+    image_mode: "gundam"  # Options: gundam, base
+    gpu: "0"
+    concurrency: 4
+  tesseract:
+    lang: "eng"
+
+# Embeddings Configuration
+embeddings:
+  type: "ollama"  # Options: ollama, transformers, huggingface
+  ollama:
+    model: "nomic-embed-text"
+    base_url: "http://localhost:11434"
+  transformers:
+    model_name: "sentence-transformers/all-MiniLM-L6-v2"
+    device: "cuda"  # Options: cuda, cpu
+
+# Vector Store Configuration
+vector_store:
+  type: "chroma"  # Options: chroma, faiss, weaviate
+  chroma:
+    persist_directory: "./data/chroma_db"
+    collection_name: "ocr_documents"
+  faiss:
+    index_path: "./data/faiss_index"
+    dimension: 384
+
+# LLM Configuration
+llm:
+  type: "ollama"  # Options: ollama, huggingface, openai
+  ollama:
+    model: "qwen:3.8b"
+    base_url: "http://localhost:11434"
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 2048
+
+# RAG Pipeline Configuration
+rag:
+  chunk_size: 512
+  chunk_overlap: 50
+  top_k_retrieval: 5
+  similarity_threshold: 0.5
+
+# Logging
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: "./logs/rag_system.log"
+
+# Data Paths
+data:
+  input_dir: "./data/input"
+  output_dir: "./data/output"
+  documents_dir: "./data/documents"

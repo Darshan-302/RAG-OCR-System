@@ -1,0 +1,25 @@
+# Core dependencies
+pyyaml>=6.0
+requests>=2.31.0
+numpy>=1.24.0
+
+# OCR
+PyMuPDF>=1.23.0  # For PDF processing
+
+# For Unlimited OCR (optional)
+# sglang>=0.1.0
+
+# For Tesseract OCR (optional)
+# pytesseract>=0.3.10
+# Pillow>=10.0.0
+
+# Embeddings
+chromadb>=0.4.0  # For Chroma vector store
+faiss-cpu>=1.7.4  # For FAISS vector store (use faiss-gpu for GPU support)
+sentence-transformers>=2.2.0  # For transformer-based embeddings
+
+# LLM
+# ollama client is handled via API calls, no special package needed
+
+# Optional for development
+python-dotenv>=1.0.0

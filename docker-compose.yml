@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Ollama service for local LLM and embeddings
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag-ocr-ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_MODELS=/models
+    volumes:
+      - ollama_data:/root/.ollama
+    command: serve
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RAG OCR Application
+  rag-ocr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-ocr-app
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OLLAMA_BASE_URL=http://ollama:11434
+    command: python cli/main.py --config config/config.yaml --stats
+    networks:
+      - rag-network
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  ollama_data:
